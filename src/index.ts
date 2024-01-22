@@ -24,13 +24,13 @@ let ROOT_PATH = '/src/views'
  *
  * `meta` 里的 *beforeEnter* | *redirect* 会被提取出来
  *
- * @param rootPath 路由路径
+ * @param rootPath 路由根路径 默认 `/src/views`
  * @returns 生成路由配置
  * @example
  * { component, meta, path, name, beforeEnter, redirect }
  */
 function genRoutes(rootPath = '/src/views') {
-    ROOT_PATH = rootPath
+    ROOT_PATH = normalizePath(rootPath)
     const routeMap = genRouteMap()
     const routeTarget = hanldeNest(routeMap)
     return Object.values(routeTarget) as RouteItem[]
@@ -194,7 +194,7 @@ function hanldeNest(routeMap: Map<string, RouteItem>) {
             /** /path/path2 => ['', 'path', 'path2'] */
             /** parame 路由其实是同一个节点 所以过滤掉 :param */
             const pathChunk = path.split('/').filter((p) => !p.startsWith(':')),
-            pathChunkLen = pathChunk.length
+                pathChunkLen = pathChunk.length
             if (
                 pathChunkLen === pathLen
             ) {
@@ -263,6 +263,22 @@ function hanldeNest(routeMap: Map<string, RouteItem>) {
             return null
         }
     }
+}
+
+
+/** 统一路径为 /src/views */
+function normalizePath(rootPath: string) {
+    if (rootPath.startsWith('.')) {
+        rootPath = rootPath.slice(1)
+    }
+    if (!rootPath.startsWith('/')) {
+        rootPath = '/' + rootPath
+    }
+    if (rootPath.endsWith('/')) {
+        rootPath = rootPath.slice(0, -1)
+    }
+
+    return rootPath
 }
 
 

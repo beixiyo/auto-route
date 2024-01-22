@@ -21,11 +21,6 @@ export function getMeta(src: string) {
 
 /** 返回命令行起始路径 比如`C:\\code\\src\\views` => `/src/views` */
 export function getRoutePath(str: string, rootPath: string) {
-    /** 统一路径为 /src/views */
-    if (rootPath.startsWith('.')) rootPath = rootPath.slice(1)
-    if (!str.startsWith('/')) str = '/' + str
-    if (str.endsWith('/')) str = str.slice(0, -1)
-
     str = str.replace(/\\/g, '/')
     const i = str.search(rootPath)
     return str.slice(i)
