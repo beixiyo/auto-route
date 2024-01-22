@@ -2,7 +2,8 @@ import { resolve } from 'node:path'
 import { readFileSync } from 'node:fs'
 
 
-const REG_META = /\s*export default\s*(\{[\s\S]*\})/
+const REG_META = /\s*export default\s*(\{[\s\S]*\})/,
+    COMP_PATH = /\[.+?\]/g
 
 /** 返回相对于命令行的路径拼接 */
 export function getMatchPath(path: string) {
@@ -24,6 +25,11 @@ export function getRoutePath(str: string, rootPath: string) {
     str = str.replace(/\\/g, '/')
     const i = str.search(rootPath)
     return str.slice(i)
+}
+
+/** 获取组件路径 */
+export function getCompPath(path: string) {
+    return path.replace(COMP_PATH, '')
 }
 
 /**

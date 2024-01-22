@@ -8,28 +8,31 @@ npm i @jl-org/auto-route
 ```
 
 ## 使用
-
 ```ts
 import { genRoutes } from '@jl-org/auto-route'
-import { createRouter, createWebHistory } from 'vue-router'
+import { resolve } from 'node:path'
 
-
-const routes = genRoute()
-const router = createRouter({
-    history: createWebHistory(),
-    routes
+/** 写入某个路径 */
+genRoutes({
+    writePath: resolve('src/route.ts'),
 })
 
-export default router
+/** 读取路由对象 */
+const routes = genRoutes()
 ```
 
 ## 参数
 
-请在 *rootPath* 填写你的路由文件夹路径
-
 ```ts
-function genRoutes(rootPath = '/src/views') {
-    // ...
+function genRoutes(opts?: Opts);
+
+type Opts = {
+    /** 要写入的路径 不填则返回一个路由数组 */
+    writePath?: string
+    /** 路由文件夹路径 默认 /src/views */
+    rootPath?: string
+    /** 写入格式化空格 */
+    space?: 2 | 4
 }
 ```
 
@@ -82,6 +85,8 @@ function genRoutes(rootPath = '/src/views') {
 ## 如果使用路由守卫？
 
 在 *meta.ts* | *meta.js* 文件中，添加一个 *beforeEnter* 函数即可
+
+建议写 *meta.js* ，因为 eval 转化的不允许使用 ts
 
 *beforeEnter* 会被自动提取出来
 

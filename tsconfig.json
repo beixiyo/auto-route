@@ -4,6 +4,7 @@
         "module": "ESNext",
         "moduleResolution": "Node",
         "lib": ["ESNext", "DOM", "DOM.Iterable"],
+        "allowSyntheticDefaultImports": true,
 
         "baseUrl": ".",
         "paths": {

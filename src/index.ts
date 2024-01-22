@@ -1,5 +1,7 @@
 import { globSync } from 'glob'
-import { getMatchPath, getMeta, getRoutePath, toCamel } from './tools'
+import { getCompPath, getMatchPath, getMeta, getRoutePath, toCamel } from './tools'
+import { writeFileSync } from 'node:fs'
+import serialize from 'serialize-javascript'
 
 
 const RAW_PATH = Symbol('rawPath'),
@@ -24,16 +26,28 @@ let ROOT_PATH = '/src/views'
  *
  * `meta` 里的 *beforeEnter* | *redirect* 会被提取出来
  *
- * @param rootPath 路由根路径 默认 `/src/views`
  * @returns 生成路由配置
  * @example
  * { component, meta, path, name, beforeEnter, redirect }
  */
-function genRoutes(rootPath = '/src/views') {
+function genRoutes(opts: Opts = {}): RouteItem[] | void {
+    const { rootPath, space = 4, writePath } = opts
+
     ROOT_PATH = normalizePath(rootPath)
     const routeMap = genRouteMap()
     const routeTarget = hanldeNest(routeMap)
-    return Object.values(routeTarget) as RouteItem[]
+    const routes = Object.values(routeTarget) as RouteItem[]
+
+    if (!writePath) {
+        return routes
+    }
+
+    let routeStr = serialize(routes, {
+        space,
+        unsafe: true
+    })
+    routeStr = `export const routes = ${routeStr}`
+    writeFileSync(writePath, routeStr)
 }
 
 export default genRoutes
@@ -55,7 +69,7 @@ function genRouteMap() {
     compArr.forEach((item) => {
         const compPath = getRoutePath(item, ROOT_PATH),
             basePath = compPath.replace('/index.vue', ''),
-            component = eval(`(() => import('${compPath}'))`),
+            component = eval(`(() => import('${getCompPath(compPath)}'))`),
             metaPath = metaArr.find((m) => {
                 const _metaPath = getRoutePath(m, ROOT_PATH).replace(/\/meta.*/, '')
                 if (basePath === _metaPath) {
@@ -268,6 +282,8 @@ function hanldeNest(routeMap: Map<string, RouteItem>) {
 
 /** 统一路径为 /src/views */
 function normalizePath(rootPath: string) {
+    if (!rootPath) return ROOT_PATH
+
     if (rootPath.startsWith('.')) {
         rootPath = rootPath.slice(1)
     }
@@ -281,6 +297,15 @@ function normalizePath(rootPath: string) {
     return rootPath
 }
 
+
+export type Opts = {
+    /** 要写入的路径 不填则返回一个路由数组 */
+    writePath?: string
+    /** 路由文件夹路径 默认 /src/views */
+    rootPath?: string
+    /** 写入格式化空格 */
+    space?: 2 | 4
+}
 
 type RouteItem = {
     path: string
