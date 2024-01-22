@@ -1,6 +1,6 @@
 {
     "name": "@jl-org/auto-route",
-    "version": "1.0.31",
+    "version": "1.0.32",
     "description": "自动生成路由配置，支持嵌套路由",
     "homepage": "https://github.com/beixiyo/auto-route",
     "module": "dist/index.js",
@@ -10,13 +10,13 @@
         "/dist"
     ],
     "exports": {
-        "import": {
-            "default": "./dist/index.js",
-            "types": "./dist/typings/index.d.ts"
-        },
         "require": {
-            "default": "./dist/index.cjs",
-            "types": "./dist/typings/index.d.ts"
+            "types": "./dist/typings/index.d.ts",
+            "default": "./dist/index.cjs"
+        },
+        "import": {
+            "types": "./dist/typings/index.d.ts",
+            "default": "./dist/index.js"
         }
     },
     "scripts": {

@@ -4,8 +4,9 @@ import { readFileSync } from 'node:fs'
 
 const REG_META = /\s*export default\s*(\{[\s\S]*\})/
 
-
+/** 返回相对于命令行的路径拼接 */
 export function getMatchPath(path: string) {
+    /** 统一路径 不能是绝对路径拼接 */
     if (path.startsWith('/')) path = path.slice(1)
     return resolve(path).replace(/\\/g, '/')
 }
@@ -18,8 +19,13 @@ export function getMeta(src: string) {
     return {}
 }
 
+/** 返回命令行起始路径 比如`C:\\code\\src\\views` => `/src/views` */
 export function getRoutePath(str: string, rootPath: string) {
+    /** 统一路径为 /src/views */
     if (rootPath.startsWith('.')) rootPath = rootPath.slice(1)
+    if (!str.startsWith('/')) str = '/' + str
+    if (str.endsWith('/')) str = str.slice(0, -1)
+
     str = str.replace(/\\/g, '/')
     const i = str.search(rootPath)
     return str.slice(i)

@@ -2,6 +2,11 @@
 
 > 如果你使用 *vite*，请使用 `https://www.npmjs.com/package/@jl-org/vite-auto-route`
 
+## 安装
+```bash
+npm i @jl-org/auto-route
+```
+
 ## 使用
 
 ```ts
