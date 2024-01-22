@@ -29,10 +29,7 @@ export default router
 
 ```ts
 function genRoutes(rootPath = '/src/views') {
-    ROOT_PATH = rootPath
-    const routeMap = genRouteMap()
-    const routeTarget = hanldeNest(routeMap)
-    return Object.values(routeTarget) as RouteItem[]
+    // ...
 }
 ```
 

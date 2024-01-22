@@ -1,6 +1,6 @@
 {
     "name": "@jl-org/auto-route",
-    "version": "1.0.32",
+    "version": "1.0.4",
     "description": "自动生成路由配置，支持嵌套路由",
     "homepage": "https://github.com/beixiyo/auto-route",
     "module": "dist/index.js",

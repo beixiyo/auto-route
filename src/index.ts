@@ -12,7 +12,6 @@ let ROOT_PATH = '/src/views'
 
 
 /**
- * @param 路由路径
  * '/src/views' 下的每个文件夹 必须有`index.vue`
  *
  * param 参数，使用`[]`包裹： `/about[param]`
@@ -25,7 +24,8 @@ let ROOT_PATH = '/src/views'
  *
  * `meta` 里的 *beforeEnter* | *redirect* 会被提取出来
  *
- * 生成路由配置
+ * @param rootPath 路由路径
+ * @returns 生成路由配置
  * @example
  * { component, meta, path, name, beforeEnter, redirect }
  */
@@ -40,6 +40,7 @@ export default genRoutes
 export {
     genRoutes
 }
+
 
 
 /**
@@ -76,7 +77,6 @@ function genRouteMap() {
             path: paramPath,
             meta,
         })
-
     })
     return routeMap
 }
@@ -108,6 +108,12 @@ function hanldeNest(routeMap: Map<string, RouteItem>) {
         const _path = path.replace(ROOT_PATH, '') || '/'
         /** /path/path2 => ['', 'path', 'path2', ...] */
         const pathChunk = _path.split('/')
+        let len = pathChunk.length
+
+        /** 说明也是根目录 */
+        if (len === 3 && pathChunk[2].startsWith(':')) {
+            len = 2
+        }
 
         /** 不能用 `delete meta.beforeEnter` 会导致下次调用无法读取 */
         const _meta: any = {}
@@ -121,7 +127,7 @@ function hanldeNest(routeMap: Map<string, RouteItem>) {
             _meta[k] = meta[k]
         }
 
-        if (pathChunk.length === 2) {
+        if (len === 2) {
             const parent = pathChunk[1] || '/'
             parentTarget[parent] = {
                 path,
@@ -188,7 +194,7 @@ function hanldeNest(routeMap: Map<string, RouteItem>) {
             /** /path/path2 => ['', 'path', 'path2'] */
             /** parame 路由其实是同一个节点 所以过滤掉 :param */
             const pathChunk = path.split('/').filter((p) => !p.startsWith(':')),
-                pathChunkLen = pathChunk.length
+            pathChunkLen = pathChunk.length
             if (
                 pathChunkLen === pathLen
             ) {
