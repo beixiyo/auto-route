@@ -281,7 +281,7 @@ function hanldeNest(routeMap: Map<string, RouteItem>) {
 
 
 /** 统一路径为 /src/views */
-function normalizePath(rootPath: string) {
+function normalizePath(rootPath?: string) {
     if (!rootPath) return ROOT_PATH
 
     if (rootPath.startsWith('.')) {
