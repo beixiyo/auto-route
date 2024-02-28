@@ -1,6 +1,6 @@
 {
     "name": "@jl-org/auto-route",
-    "version": "1.0.5",
+    "version": "1.0.51",
     "description": "自动生成路由配置，支持嵌套路由",
     "homepage": "https://github.com/beixiyo/auto-route",
     "module": "dist/index.js",
@@ -46,5 +46,8 @@
         "rollup-plugin-clear": "^2.0.7",
         "tsc-alias": "^1.8.8",
         "tslib": "^2.6.2"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }
