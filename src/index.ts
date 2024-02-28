@@ -312,5 +312,4 @@ type RouteItem = {
     name: string
     component: any
     meta: Record<string, any>
-    redirect?: string
 }
