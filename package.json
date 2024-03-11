@@ -29,7 +29,7 @@
         "auto-route"
     ],
     "author": "cjl",
-    "license": "ISC",
+    "license": "MIT",
     "dependencies": {
         "glob": "^10.3.10",
         "serialize-javascript": "^6.0.2"
